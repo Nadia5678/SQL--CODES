@@ -1,0 +1,46 @@
+--Visualization Queries--
+
+--Look at what year had the SUM highest and lowest layoffs
+SELECT YEAR, Sum(Laid_off_count) AS Sum_of_Laidoff
+FROM layoffs_data 
+GROUP BY Year
+ORDER by Year DESC 
+
+--Looking at the AVG Total of layoffs in each industry
+SELECT
+Location, Country, Industry, Avg(Laid_off_Count) AS Average_Total_Laid_off
+From layoffs_data
+Where Industry is not NULL
+and Country is not NULL
+Group BY Location, Country, Industry
+order by Average_Total_Laid_off DESC
+
+--Shows the Max and Min total of layoff in each industry 
+SELECT
+Location, Country, Industry, Max(Laid_off_Count) AS Max_Laid_off ,Min(Laid_off_Count) AS Min_Laid_off
+From layoffs_data
+Where Industry is not NULL
+and Country is not NULL
+Group BY Location, Country, Industry
+order by Max_Laid_off DESC
+
+--Looking at the Avg Total of laidoff by Company stages
+SELECT
+Stage, Avg(Laid_off_Count) AS StageAverage_Total_Laid_off
+From layoffs_data
+Group BY stage
+order by StageAverage_Total_Laid_off
+
+--Highesst and lowest layoff by Countries
+SELECT Country, sum(laid_off_count) as Country_laid_off
+FROM [layoffs_data ]
+WHERE Laid_Off_Count is not NULL
+GROUP BY Country
+ORDER BY Country_laid_off DESC
+
+--Look at what countries had the highest and lowest by Industry 
+SELECT Industry, sum(laid_off_count) as Industry_laid_off
+FROM [layoffs_data ]
+WHERE Laid_Off_Count is not NULL
+GROUP BY Industry
+ORDER BY Industry_laid_off DESC
