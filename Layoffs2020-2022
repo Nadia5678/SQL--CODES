@@ -1,3 +1,5 @@
+--Dataset source-->https://layoffs.fyi/
+
 -- Add '[Year]' to table '[Layoffs_data]' in schema '[dbo]'
 ALTER TABLE dbo.layoffs_data
 ADD YEAR DATE
