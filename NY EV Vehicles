@@ -1,0 +1,149 @@
+SELECT *
+From Electric_Vehicle_Charging_Stations_in_New_Yorkk
+
+--Convert Updated_At to date
+  Select Updated_At, Convert(date,Updated_At) as Update_AT_Date
+  FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+ Group BY Updated_at
+  ORDER BY Update_AT_Date
+
+ALTER TABLE Electric_Vehicle_Charging_Stations_in_New_Yorkk
+ADD Update_AT_Date date
+
+UPDATE Electric_Vehicle_Charging_Stations_in_New_Yorkk
+SET Update_AT_Date = CONVERT(date,Updated_At)
+
+---Delete unneeded columns
+ALTER TABLE Electric_Vehicle_Charging_Stations_in_New_Yorkk
+DROP COLUMN Intersection_Directions, Plus4, Expected_date, Updated_At
+
+SELECT *
+From Electric_Vehicle_Charging_Stations_in_New_Yorkk
+
+--Data Cleaning and Over looking data Electric_Vehicle_Charging_Stations_in_New_York
+SELECT *
+From Electric_Vehicle_Charging_Stations_in_New_Yorkk
+
+SELECT ID,City,Zip
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+Order by ID DESC
+
+Select ID,Count(ID)as number_of_ID
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+Group by ID
+order BY number_of_ID DESC
+
+Select Len(Status_Code)
+From Electric_Vehicle_Charging_Stations_in_New_Yorkk
+
+Select Ev_Connector_types
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+
+Select City,Count(City)as number_of_city
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+Group by City
+order BY number_of_city DESC
+
+SELECT Street_Address, City,Zip
+From Electric_Vehicle_Charging_Stations_in_New_Yorkk
+Where City IN ('New York','New York City')
+
+--Update mix match city and zipcode. Few Zipcodes location did not match city location
+
+Select Street_Address, City,Zip
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+WHERE Zip = 10305
+
+Select Street_Address, City,Zip
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+WHERE city = 'Clifton Park'
+ 
+UPDATE Electric_Vehicle_Charging_Stations_in_New_Yorkk
+Set City = 'Clifton Park'
+Where City = 'Clifton park' AND Zip = 12065
+
+UPDATE Electric_Vehicle_Charging_Stations_in_New_Yorkk
+Set City = 'Staten Island'
+Where Street_Address = '920 Father Capodanno Blvd' AND Zip = 10305
+
+SELECT ID, Street_Address,City, Zip
+From Electric_Vehicle_Charging_Stations_in_New_Yorkk
+
+UPDATE Electric_Vehicle_Charging_Stations_in_New_Yorkk
+Set City = 'Albany'
+Where  City = 'Colonie' and Zip = 12205
+
+--Data Clean Electric_Vehicle_Drive_Clean_Rebate_Data
+SELECT *
+FROM Electric_Vehicle_Drive_Clean_Rebate_Data
+
+Select Len(Submitted_Date) 
+From Electric_Vehicle_Drive_Clean_Rebate_Data
+
+SELECT *
+FROM Electric_Vehicle_Drive_Clean_Rebate_Data
+WHERE Zip is NOT NULL
+
+--Total of EV Charging Station by ID /Total of EV Charging Station by City
+SELECT Count(ID)
+From Electric_Vehicle_Charging_Stations_in_New_Yorkk
+
+SELECT City, Count(Id) as Number_of_EVstation_by_City
+From Electric_Vehicle_Charging_Stations_in_New_Yorkk
+Group by City
+Order by Number_of_EVstation_by_City DESC
+
+Select EV_Connector_Types, COUNT(EV_Connector_Types) AS Count_EV
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+GROUP BY EV_Connector_Types
+ORDER BY Count_EV
+
+---Total of New York Residents with EV vehicles & By County or City
+Select Count(Submitted_Date) AS Total_of_NY_EV_Residents
+FROM Electric_Vehicle_Drive_Clean_Rebate_Data
+
+SELECT County, Count(Submitted_Date) AS Total_of_NYer
+FROM Electric_Vehicle_Drive_Clean_Rebate_Data
+WHERE County is NOT NULL
+GROUP BY County
+Order BY Total_of_NYer DESC
+
+---Looking at the Total EV New York Residents, who lives in near charging station by Zip and City.
+--I used Submitted_Date to Represent as Number of NY Residents with EV vehicles
+
+SELECT *
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk 
+inner JOIN Electric_Vehicle_Drive_Clean_Rebate_Data 
+ON Electric_Vehicle_Drive_Clean_Rebate_Data.County = Electric_Vehicle_Charging_Stations_in_New_Yorkk.City
+And Electric_Vehicle_Drive_Clean_Rebate_Data.ZIP = Electric_Vehicle_Charging_Stations_in_New_Yorkk.Zip
+WHERE Electric_Vehicle_Drive_Clean_Rebate_Data.Zip is NOT NULL
+
+SELECT Electric_Vehicle_Drive_Clean_Rebate_Data.County,
+Electric_Vehicle_Charging_Stations_in_New_Yorkk.Zip,
+ Electric_Vehicle_Charging_Stations_in_New_Yorkk.ID,
+ Electric_Vehicle_Drive_Clean_Rebate_Data.Submitted_Date, 
+
+COUNT(Electric_Vehicle_Drive_Clean_Rebate_Data.Submitted_Date)  
+ OVER (PARTITION By Electric_Vehicle_Charging_Stations_in_New_Yorkk.zip) AS Number_of_NY_in_City,
+
+COUNT(Electric_Vehicle_Charging_Stations_in_New_Yorkk.ID) OVER (PARTITION by Electric_Vehicle_Charging_Stations_in_New_Yorkk.ID,
+ Electric_Vehicle_Charging_Stations_in_New_Yorkk.Zip) AS Number_of_NY_in_zip
+
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk 
+ JOIN Electric_Vehicle_Drive_Clean_Rebate_Data 
+ ON Electric_Vehicle_Drive_Clean_Rebate_Data.County = Electric_Vehicle_Charging_Stations_in_New_Yorkk.City
+ And Electric_Vehicle_Drive_Clean_Rebate_Data.ZIP = Electric_Vehicle_Charging_Stations_in_New_Yorkk.Zip
+ WHERE Electric_Vehicle_Drive_Clean_Rebate_Data.Zip is NOT NULL
+Order by Number_of_NY_in_City DESC
+
+
+
+
+SELECT *
+FROM Electric_Vehicle_Charging_Stations_in_New_Yorkk
+
+SELECT *
+FROM Electric_Vehicle_Drive_Clean_Rebate_Data
+WHERE Zip is NOT NULL
+AND County = 'Albany'
+
